@@ -7,18 +7,16 @@ interface CustomError extends Error {
 
 export function errorHandler(
   err: CustomError,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) {
-  console.error(err); // Opcional: log para desarrollo
-
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
 
   res.status(statusCode).json({
     success: false,
     message,
-    ...(err.errors && { errors: err.errors }), // Opcional, detalles de validación
+    ...(err.errors && { errors: err.errors }),
   });
 }

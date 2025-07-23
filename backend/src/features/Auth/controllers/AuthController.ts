@@ -1,4 +1,4 @@
-import { catchAsync } from "../../../middlewares/CatchAsync"
+import { catchAsync } from "../../../middlewares";
 import { validateRegister } from "../schemas/AuthSchema"
 import { AuthService } from "../services"
 import { hashPassword } from '../utils/AuthUtils';
