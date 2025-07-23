@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String        @id @default(cuid())
+  name                 String
+  lastName             String
+  phone                Int
+  img                  String
+  email                String        @unique
+  password             String
+  role                 Role          @default(EMPLOYEE)
+  clients              Client[]      @relation("AssignedClients")
+  interactionsAuthored Interaction[] @relation("UserInteractionsAutor")
+  mensajesCreados      Message[]
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+}
+
+model Client {
+  id            String        @id @default(cuid())
+  name          String
+  email         String?       @unique
+  phone         String
+  state         EstadoCliente @default(POTENCIAL)
+  assignedTo    User?         @relation("AssignedClients", fields: [assignedToId], references: [id])
+  assignedToId  String?
+  interacciones Interaction[]
+  mensajes      Message[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([assignedToId])
+}
+
+model Interaction {
+  id        String   @id @default(cuid())
+  tipo      String
+  nota      String
+  cliente   Client   @relation(fields: [clienteId], references: [id])
+  clienteId String
+  autor     User     @relation("UserInteractionsAutor", fields: [autorId], references: [id])
+  autorId   String
+  createdAt DateTime @default(now())
+
+  @@index([clienteId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  contenido   String
+  emisor      Emisor
+  cliente     Client   @relation(fields: [clienteId], references: [id])
+  clienteId   String
+  creadoPor   User?    @relation(fields: [creadoPorId], references: [id])
+  creadoPorId String?
+  createdAt   DateTime @default(now())
+
+  @@index([clienteId])
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+enum Emisor {
+  CLIENTE
+  EMPLEADO
+}
+
+enum EstadoCliente {
+  POTENCIAL
+  ACTIVO
+  PERDIDO
+  FRIO
+}
