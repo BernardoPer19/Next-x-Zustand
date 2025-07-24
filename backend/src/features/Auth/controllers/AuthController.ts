@@ -1,7 +1,8 @@
 import { catchAsync } from "../../../middlewares";
-import { validateRegister } from "../schemas/AuthSchema"
+import { validateLogin, validateRegister } from "../schemas/AuthSchema"
 import { AuthService } from "../services"
-import { hashPassword } from '../utils/AuthUtils';
+import { createToken, hashPassword } from '../utils/AuthUtils';
+import { options } from "../utils/CookiesOptions";
 
 
 class AuthController {
@@ -28,6 +29,28 @@ class AuthController {
                 email: newUser.email,
                 role: newUser.role,
             },
+        });
+    });
+
+
+    public login = catchAsync(async (req, res, _next) => {
+        const { email, password } = validateLogin(req.body);
+
+        const user = await AuthService.LoginValidateService({ email, password });
+
+        const token = createToken({
+            id: user.id,
+            email: user.email,
+            phone: user.phone,
+            createdAt: user.createdAt,
+        });
+
+        res
+        .status(200)
+        .cookie("access_token", token, options)
+        .json({
+            message: "¡Sesión iniciada correctamente!",
+            user,
         });
     });
 

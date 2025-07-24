@@ -1,6 +1,7 @@
 import { EstadoCliente, Role } from "@prisma/client";
 
 export interface RegisterUser {
+    id: string
     userName: string;
     name: string;
     lastName: string;
@@ -9,7 +10,7 @@ export interface RegisterUser {
     img: string;
     role: Role;
     password: string;
-    createAt: Date;
+    createdAt: Date;
 }
 
 
@@ -19,5 +20,5 @@ export interface RegisterClient {
     email: string;
     state: EstadoCliente;
     phone: string;
-    createAt: Date;
+    createdAt: Date;
 }
