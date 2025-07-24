@@ -46,13 +46,36 @@ class AuthController {
         });
 
         res
-        .status(200)
-        .cookie("access_token", token, options)
-        .json({
-            message: "¡Sesión iniciada correctamente!",
-            user,
+            .status(200)
+            .cookie("access_token", token, options)
+            .json({
+                message: "¡Sesión iniciada correctamente!",
+                user,
+            });
+    });
+
+
+    public logout = catchAsync(async (_req, res, _next) => {
+        res
+            .clearCookie("access_token")
+            .status(200)
+            .json({
+                success: true,
+                message: "Sesión cerrada correctamente",
+            });
+    });
+
+
+    public getProfile = catchAsync(async (req, res, _next) => {
+        const userId = req.user.id; 
+        const profile = await AuthService.getUserProfile(userId);
+
+        res.status(200).json({
+            success: true,
+            user: profile,
         });
     });
+
 
 }
 
