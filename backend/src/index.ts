@@ -1,17 +1,18 @@
-import express, { Request, Response } from 'express';
-import { authRouter } from './features/Auth/routes/Auth.routes';
+import express from 'express';
 import { errorHandler } from './Error/ErrorHandler';
+import { prisma } from './config/prisma';
+import { iniciarAuthRouter } from './features/Auth/routes/Auth.routes';
+import { iniciarClientRouter } from './features/Clients/routes/Clients.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/", authRouter)
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Servidor Express funcionando');
-});
+app.use("/api/auth", iniciarAuthRouter({ prisma }));
+app.use("/", iniciarClientRouter({ prisma }))
+
 
 
 app.use(errorHandler);
