@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 
-app.use("/api/auth", iniciarAuthRouter({ prisma }));
-app.use("/", iniciarClientRouter({ prisma }))
+app.use("/auth", iniciarAuthRouter({ prisma }));
+app.use("/clients", iniciarClientRouter({ prisma }))
 
 
 
