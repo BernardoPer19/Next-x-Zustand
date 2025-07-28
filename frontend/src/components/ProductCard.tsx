@@ -10,6 +10,7 @@ import Image from "next/image";
 import React from "react";
 import FavoriteWrapper from "@/components/wrappers/FavoriteWrapper";
 import { ProductsType } from "@/types/interfaces.ProductsType";
+import Link from "next/link";
 
 interface Props {
   products: ProductsType[];
@@ -97,10 +98,14 @@ function ProductCard({ products }: Props) {
               Añadir
             </button>
 
-            <button className="flex items-center gap-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition">
+            <Link
+              prefetch
+              href={`/products/${prod.id}`}
+              className="flex items-center gap-2 bg-gray-200 text-gray-800 px-5 py-2 rounded-md hover:bg-gray-300 transition"
+            >
               <FaEye />
               Ver
-            </button>
+            </Link>
 
             <FavoriteWrapper product={prod} />
           </div>
